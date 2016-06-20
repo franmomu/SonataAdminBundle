@@ -58,4 +58,14 @@ class FieldDescription extends BaseFieldDescription
     {
         // TODO: Implement getValue() method.
     }
+
+    public function describesSingleValuedAssociation()
+    {
+        // TODO: Implement describesSingleValuedAssociation() method.
+    }
+
+    public function describesCollectionValuedAssociation()
+    {
+        // TODO: Implement describesCollectionValuedAssociation() method.
+    }
 }

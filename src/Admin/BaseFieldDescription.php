@@ -479,4 +479,12 @@ abstract class BaseFieldDescription implements FieldDescriptionInterface
             }
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    final public function describesAssociation()
+    {
+        return $this->describesSingleValuedAssociation() || $this->describesCollectionValuedAssociation();
+    }
 }
