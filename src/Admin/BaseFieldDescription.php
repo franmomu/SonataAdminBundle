@@ -431,6 +431,14 @@ abstract class BaseFieldDescription implements FieldDescriptionInterface
         return false !== $this->getOption('virtual_field', false);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    final public function describesAssociation()
+    {
+        return $this->describesSingleValuedAssociation() || $this->describesCollectionValuedAssociation();
+    }
+
     private function getFieldGetterKey($object, ?string $fieldName): ?string
     {
         if (!\is_string($fieldName)) {
@@ -478,13 +486,5 @@ abstract class BaseFieldDescription implements FieldDescriptionInterface
                 self::$fieldGetters[$getterKey]['getter'] = $getter;
             }
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    final public function describesAssociation()
-    {
-        return $this->describesSingleValuedAssociation() || $this->describesCollectionValuedAssociation();
     }
 }
