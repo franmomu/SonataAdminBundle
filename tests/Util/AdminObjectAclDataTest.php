@@ -169,8 +169,8 @@ class AdminObjectAclDataTest extends TestCase
             $this->assertInternalType('string', $permission);
         }
 
-        $this->assertTrue(false !== array_search('OWNER', $adminObjectAclDataOwner->getUserPermissions(), true));
-        $this->assertTrue(false !== array_search('MASTER', $adminObjectAclDataOwner->getUserPermissions(), true));
+        $this->assertNotFalse(array_search('OWNER', $adminObjectAclDataOwner->getUserPermissions(), true));
+        $this->assertNotFalse(array_search('MASTER', $adminObjectAclDataOwner->getUserPermissions(), true));
 
         $adminObjectAclData = $this->createAdminObjectAclData(false);
         $this->assertInternalType('array', $adminObjectAclData->getUserPermissions());
