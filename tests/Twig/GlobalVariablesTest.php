@@ -104,10 +104,8 @@ class GlobalVariablesTest extends TestCase
      */
     public function testInvalidArgumentException(): void
     {
-        $this->expectException(
-            \InvalidArgumentException::class,
-            '$adminPool should be an instance of Sonata\AdminBundle\Admin\Pool'
-        );
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('$adminPool should be an instance of Sonata\AdminBundle\Admin\Pool');
 
         new GlobalVariables('foo');
     }

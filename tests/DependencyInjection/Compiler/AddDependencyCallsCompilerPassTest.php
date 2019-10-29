@@ -63,8 +63,8 @@ class AddDependencyCallsCompilerPassTest extends TestCase
 
     public function testTranslatorDisabled(): void
     {
-        $this->expectException(
-            \RuntimeException::class, 'The "translator" service is not yet enabled.
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('The "translator" service is not yet enabled.
                 It\'s required by SonataAdmin to display all labels properly.
 
                 To learn how to enable the translator service please visit:
@@ -387,7 +387,8 @@ class AddDependencyCallsCompilerPassTest extends TestCase
 
         $compilerPass = new AddDependencyCallsCompilerPass();
 
-        $this->expectException(\RuntimeException::class, 'You can\'t use "on_top" option with multiple same name groups.');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('You can\'t use "on_top" option with multiple same name groups.');
 
         $compilerPass->process($container);
     }
@@ -423,7 +424,8 @@ class AddDependencyCallsCompilerPassTest extends TestCase
 
         $compilerPass = new AddDependencyCallsCompilerPass();
 
-        $this->expectException(\RuntimeException::class, 'You can\'t use "on_top" option with multiple same name groups.');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('You can\'t use "on_top" option with multiple same name groups.');
 
         $compilerPass->process($container);
     }
@@ -444,7 +446,8 @@ class AddDependencyCallsCompilerPassTest extends TestCase
             ->setArguments(['', ReportOne::class, CRUDController::class])
             ->addTag('sonata.admin', ['group' => 'sonata_report_group', 'manager_type' => 'orm', 'on_top' => true]);
 
-        $this->expectException(\RuntimeException::class, 'You can\'t use "on_top" option with multiple same name groups.');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('You can\'t use "on_top" option with multiple same name groups.');
 
         $compilerPass->process($container);
     }
@@ -465,7 +468,8 @@ class AddDependencyCallsCompilerPassTest extends TestCase
             ->setArguments(['', ReportOne::class, CRUDController::class])
             ->addTag('sonata.admin', ['group' => 'sonata_report_group', 'manager_type' => 'orm', 'on_top' => false]);
 
-        $this->expectException(\RuntimeException::class, 'You can\'t use "on_top" option with multiple same name groups.');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('You can\'t use "on_top" option with multiple same name groups.');
 
         $compilerPass->process($container);
     }

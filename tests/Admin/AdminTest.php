@@ -144,12 +144,9 @@ class AdminTest extends TestCase
             'Application\Sonata\NewsBundle\Entity\Post',
             'SonataNewsBundle:PostAdmin'
         );
-        $this->expectException(
-            \InvalidArgumentException::class
-        );
-        $this->expectExceptionMessage(
-            'Action "made-up" could not be found'
-        );
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Action "made-up" could not be found');
+
         $admin->checkAccess('made-up');
     }
 
@@ -169,12 +166,10 @@ class AdminTest extends TestCase
         );
         $admin->addExtension($customExtension->reveal());
         $admin->setSecurityHandler($securityHandler->reveal());
-        $this->expectException(
-            AccessDeniedException::class
-        );
-        $this->expectExceptionMessage(
-            'Access Denied to the action custom_action and role EXTRA_CUSTOM_ROLE'
-        );
+
+        $this->expectException(AccessDeniedException::class);
+        $this->expectExceptionMessage('Access Denied to the action custom_action and role EXTRA_CUSTOM_ROLE');
+
         $admin->checkAccess('custom_action');
     }
 
@@ -2316,8 +2311,8 @@ class AdminTest extends TestCase
 
     public function testCircularChildAdmin(): void
     {
-        $this->expectException(
-            \RuntimeException::class,
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage(
             'Circular reference detected! The child admin `sonata.post.admin.post` is already in the parent tree of the `sonata.post.admin.comment` admin.'
         );
 
@@ -2337,8 +2332,8 @@ class AdminTest extends TestCase
 
     public function testCircularChildAdminTripleLevel(): void
     {
-        $this->expectException(
-            \RuntimeException::class,
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage(
             'Circular reference detected! The child admin `sonata.post.admin.post` is already in the parent tree of the `sonata.post.admin.comment_vote` admin.'
         );
 
@@ -2364,8 +2359,8 @@ class AdminTest extends TestCase
 
     public function testCircularChildAdminWithItself(): void
     {
-        $this->expectException(
-            \RuntimeException::class,
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage(
             'Circular reference detected! The child admin `sonata.post.admin.post` is already in the parent tree of the `sonata.post.admin.post` admin.'
         );
 

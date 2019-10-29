@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\AdminBundle\Tests\DependencyInjection;
 
 use JMS\DiExtraBundle\Metadata\ClassMetadata;
+use LogicException;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Annotation\Admin;
 
@@ -30,10 +31,8 @@ class AnnotationCompilerPassTest extends TestCase
          * @Admin(class="Sonata\AdminBundle\Tests\Fixtures\Foo")
          */
 
-        $this->expectException(
-            \LogicException::class,
-            'Unable to generate admin group and label for class Sonata\AdminBundle\Tests\Fixtures\Foo.'
-        );
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Unable to generate admin group and label for class Sonata\AdminBundle\Tests\Fixtures\Foo.');
 
         $annotation = new Admin();
         $annotation->class = \Sonata\AdminBundle\Tests\Fixtures\Foo::class;

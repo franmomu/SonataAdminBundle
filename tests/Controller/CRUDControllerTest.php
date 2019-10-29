@@ -539,10 +539,8 @@ class CRUDControllerTest extends TestCase
 
     public function testConfigureWithException(): void
     {
-        $this->expectException(
-            \RuntimeException::class,
-            'There is no `_sonata_admin` defined for the controller `Sonata\AdminBundle\Controller\CRUDController`'
-        );
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('There is no `_sonata_admin` defined for the controller `Sonata\AdminBundle\Controller\CRUDController`');
 
         $this->request->attributes->remove('_sonata_admin');
         $this->protectedTestedMethods['configure']->invoke($this->controller);
@@ -550,10 +548,8 @@ class CRUDControllerTest extends TestCase
 
     public function testConfigureWithException2(): void
     {
-        $this->expectException(
-            \InvalidArgumentException::class,
-            'Found service "nonexistent.admin" is not a valid admin service'
-        );
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Found service "nonexistent.admin" is not a valid admin service');
 
         $this->pool->setAdminServiceIds(['nonexistent.admin']);
         $this->request->attributes->set('_sonata_admin', 'nonexistent.admin');
@@ -2721,7 +2717,8 @@ class CRUDControllerTest extends TestCase
 
     public function testExportActionWrongFormat(): void
     {
-        $this->expectException(\RuntimeException::class, 'Export in format `csv` is not allowed for class: `Foo`. Allowed formats are: `json`');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Export in format `csv` is not allowed for class: `Foo`. Allowed formats are: `json`');
 
         $this->admin->expects($this->once())
             ->method('checkAccess')
@@ -2795,7 +2792,8 @@ class CRUDControllerTest extends TestCase
 
     public function testHistoryActionNoReader(): void
     {
-        $this->expectException(NotFoundHttpException::class, 'unable to find the audit reader for class : Foo');
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('unable to find the audit reader for class : Foo');
 
         $this->request->query->set('id', 123);
 
@@ -2874,7 +2872,8 @@ class CRUDControllerTest extends TestCase
 
     public function testAclActionAclNotEnabled(): void
     {
-        $this->expectException(NotFoundHttpException::class, 'ACL are not enabled for this admin');
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('ACL are not enabled for this admin');
 
         $this->controller->aclAction(null, $this->request);
     }
@@ -3186,7 +3185,8 @@ class CRUDControllerTest extends TestCase
 
     public function testHistoryViewRevisionActionNotFoundException(): void
     {
-        $this->expectException(NotFoundHttpException::class, 'unable to find the object with id: 123');
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('unable to find the object with id: 123');
 
         $this->request->query->set('id', 123);
 
@@ -3199,7 +3199,8 @@ class CRUDControllerTest extends TestCase
 
     public function testHistoryViewRevisionActionNoReader(): void
     {
-        $this->expectException(NotFoundHttpException::class, 'unable to find the audit reader for class : Foo');
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('unable to find the audit reader for class : Foo');
 
         $this->request->query->set('id', 123);
 
@@ -3228,7 +3229,8 @@ class CRUDControllerTest extends TestCase
 
     public function testHistoryViewRevisionActionNotFoundRevision(): void
     {
-        $this->expectException(NotFoundHttpException::class, 'unable to find the targeted object `123` from the revision `456` with classname : `Foo`');
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('unable to find the targeted object `123` from the revision `456` with classname : `Foo`');
 
         $this->request->query->set('id', 123);
 
@@ -3344,7 +3346,8 @@ class CRUDControllerTest extends TestCase
 
     public function testHistoryCompareRevisionsActionNotFoundException(): void
     {
-        $this->expectException(NotFoundHttpException::class, 'unable to find the object with id: 123');
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('unable to find the object with id: 123');
 
         $this->request->query->set('id', 123);
 
@@ -3362,7 +3365,8 @@ class CRUDControllerTest extends TestCase
 
     public function testHistoryCompareRevisionsActionNoReader(): void
     {
-        $this->expectException(NotFoundHttpException::class, 'unable to find the audit reader for class : Foo');
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('unable to find the audit reader for class : Foo');
 
         $this->request->query->set('id', 123);
 
@@ -3391,7 +3395,8 @@ class CRUDControllerTest extends TestCase
 
     public function testHistoryCompareRevisionsActionNotFoundBaseRevision(): void
     {
-        $this->expectException(NotFoundHttpException::class, 'unable to find the targeted object `123` from the revision `456` with classname : `Foo`');
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('unable to find the targeted object `123` from the revision `456` with classname : `Foo`');
 
         $this->request->query->set('id', 123);
 
@@ -3433,7 +3438,8 @@ class CRUDControllerTest extends TestCase
 
     public function testHistoryCompareRevisionsActionNotFoundCompareRevision(): void
     {
-        $this->expectException(NotFoundHttpException::class, 'unable to find the targeted object `123` from the revision `789` with classname : `Foo`');
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('unable to find the targeted object `123` from the revision `789` with classname : `Foo`');
 
         $this->request->query->set('id', 123);
 
@@ -3555,7 +3561,8 @@ class CRUDControllerTest extends TestCase
 
     public function testBatchActionWrongMethod(): void
     {
-        $this->expectException(NotFoundHttpException::class, 'Invalid request type "GET", POST expected');
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('Invalid request type "GET", POST expected');
 
         $this->controller->batchAction($this->request);
     }
@@ -3567,7 +3574,8 @@ class CRUDControllerTest extends TestCase
      */
     public function testBatchActionActionNotDefined(): void
     {
-        $this->expectException(\RuntimeException::class, 'The `foo` batch action is not defined');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('The `foo` batch action is not defined');
 
         $batchActions = [];
 
@@ -3603,7 +3611,8 @@ class CRUDControllerTest extends TestCase
      */
     public function testBatchActionMethodNotExist(): void
     {
-        $this->expectException(\RuntimeException::class, 'A `Sonata\AdminBundle\Controller\CRUDController::batchActionFoo` method must be callable');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('A `Sonata\AdminBundle\Controller\CRUDController::batchActionFoo` method must be callable');
 
         $batchActions = ['foo' => ['label' => 'Foo Bar', 'ask_confirmation' => false]];
 
@@ -4042,9 +4051,7 @@ class CRUDControllerTest extends TestCase
 
     public function testItThrowsWhenCallingAnUndefinedMethod(): void
     {
-        $this->expectException(
-            \LogicException::class
-        );
+        $this->expectException(\LogicException::class);
         $this->expectExceptionMessage(
             'Call to undefined method Sonata\AdminBundle\Controller\CRUDController::doesNotExist'
         );
