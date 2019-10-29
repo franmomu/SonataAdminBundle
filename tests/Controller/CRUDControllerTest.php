@@ -656,7 +656,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('list'))
             ->will($this->throwException(new AccessDeniedException()));
 
-        $this->controller->listAction($this->request);
+        $this->controller->listAction();
     }
 
     public function testPreList(): void
@@ -674,7 +674,7 @@ class CRUDControllerTest extends TestCase
         $controller = new PreCRUDController();
         $controller->setContainer($this->container);
 
-        $response = $controller->listAction($this->request);
+        $response = $controller->listAction();
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame('preList called', $response->getContent());
     }
@@ -710,7 +710,7 @@ class CRUDControllerTest extends TestCase
             ->willReturn($form);
 
         $this->parameters = [];
-        $this->assertInstanceOf(Response::class, $this->controller->listAction($this->request));
+        $this->assertInstanceOf(Response::class, $this->controller->listAction());
 
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('@SonataAdmin/standard_layout.html.twig', $this->parameters['base_template']);
@@ -814,7 +814,7 @@ class CRUDControllerTest extends TestCase
             ->method('getObject')
             ->willReturn(false);
 
-        $this->controller->showAction(null, $this->request);
+        $this->controller->showAction(null);
     }
 
     public function testShowActionAccessDenied(): void
@@ -830,7 +830,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('show'))
             ->will($this->throwException(new AccessDeniedException()));
 
-        $this->controller->showAction(null, $this->request);
+        $this->controller->showAction(null);
     }
 
     /**
@@ -864,7 +864,7 @@ class CRUDControllerTest extends TestCase
             ->method('count')
             ->willReturn(0);
 
-        $this->controller->showAction(null, $this->request);
+        $this->controller->showAction(null);
     }
 
     public function testPreShow(): void
@@ -884,7 +884,7 @@ class CRUDControllerTest extends TestCase
         $controller = new PreCRUDController();
         $controller->setContainer($this->container);
 
-        $response = $controller->showAction(null, $this->request);
+        $response = $controller->showAction(null);
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame('preShow called: 123456', $response->getContent());
     }
@@ -912,7 +912,7 @@ class CRUDControllerTest extends TestCase
             ->method('getElements')
             ->willReturn(['field' => 'fielddata']);
 
-        $this->assertInstanceOf(Response::class, $this->controller->showAction(null, $this->request));
+        $this->assertInstanceOf(Response::class, $this->controller->showAction(null));
 
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('@SonataAdmin/standard_layout.html.twig', $this->parameters['base_template']);
@@ -1003,7 +1003,7 @@ class CRUDControllerTest extends TestCase
             ->method('getObject')
             ->willReturn(false);
 
-        $this->controller->deleteAction(1, $this->request);
+        $this->controller->deleteAction(1);
     }
 
     public function testDeleteActionAccessDenied(): void
@@ -1019,7 +1019,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('delete'))
             ->will($this->throwException(new AccessDeniedException()));
 
-        $this->controller->deleteAction(1, $this->request);
+        $this->controller->deleteAction(1);
     }
 
     public function testPreDelete(): void
@@ -1039,7 +1039,7 @@ class CRUDControllerTest extends TestCase
         $controller = new PreCRUDController();
         $controller->setContainer($this->container);
 
-        $response = $controller->deleteAction(null, $this->request);
+        $response = $controller->deleteAction(null);
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame('preDelete called: 123456', $response->getContent());
     }
@@ -1057,7 +1057,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('delete'))
             ->willReturn(true);
 
-        $this->assertInstanceOf(Response::class, $this->controller->deleteAction(1, $this->request));
+        $this->assertInstanceOf(Response::class, $this->controller->deleteAction(1));
 
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('@SonataAdmin/standard_layout.html.twig', $this->parameters['base_template']);
@@ -1100,7 +1100,7 @@ class CRUDControllerTest extends TestCase
             ->method('getParentAssociationMapping')
             ->willReturn('parent');
 
-        $this->controller->deleteAction(1, $this->request);
+        $this->controller->deleteAction(1);
     }
 
     public function testDeleteActionNoParentMappings(): void
@@ -1124,7 +1124,7 @@ class CRUDControllerTest extends TestCase
             ->method('getParentAssociationMapping')
             ->willReturn(false);
 
-        $this->controller->deleteAction(1, $this->request);
+        $this->controller->deleteAction(1);
     }
 
     public function testDeleteActionNoCsrfToken(): void
@@ -1142,7 +1142,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('delete'))
             ->willReturn(true);
 
-        $this->assertInstanceOf(Response::class, $this->controller->deleteAction(1, $this->request));
+        $this->assertInstanceOf(Response::class, $this->controller->deleteAction(1));
 
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('@SonataAdmin/standard_layout.html.twig', $this->parameters['base_template']);
@@ -1174,7 +1174,7 @@ class CRUDControllerTest extends TestCase
         $this->request->headers->set('X-Requested-With', 'XMLHttpRequest');
         $this->request->request->set('_sonata_csrf_token', 'csrf-token-123_sonata.delete');
 
-        $response = $this->controller->deleteAction(1, $this->request);
+        $response = $this->controller->deleteAction(1);
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame(json_encode(['result' => 'ok']), $response->getContent());
@@ -1200,7 +1200,7 @@ class CRUDControllerTest extends TestCase
 
         $this->request->headers->set('X-Requested-With', 'XMLHttpRequest');
 
-        $response = $this->controller->deleteAction(1, $this->request);
+        $response = $this->controller->deleteAction(1);
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame(json_encode(['result' => 'ok']), $response->getContent());
@@ -1231,7 +1231,7 @@ class CRUDControllerTest extends TestCase
         $this->request->request->set('_sonata_csrf_token', 'csrf-token-123_sonata.delete');
         $this->request->headers->set('X-Requested-With', 'XMLHttpRequest');
 
-        $response = $this->controller->deleteAction(1, $this->request);
+        $response = $this->controller->deleteAction(1);
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame(json_encode(['result' => 'error']), $response->getContent());
@@ -1266,7 +1266,7 @@ class CRUDControllerTest extends TestCase
         $this->request->setMethod('DELETE');
         $this->request->request->set('_sonata_csrf_token', 'csrf-token-123_sonata.delete');
 
-        $this->controller->deleteAction(1, $this->request);
+        $this->controller->deleteAction(1);
     }
 
     /**
@@ -1296,7 +1296,7 @@ class CRUDControllerTest extends TestCase
 
         $this->request->request->set('_sonata_csrf_token', 'csrf-token-123_sonata.delete');
 
-        $response = $this->controller->deleteAction(1, $this->request);
+        $response = $this->controller->deleteAction(1);
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame(['flash_delete_success'], $this->session->getFlashBag()->get('sonata_flash_success'));
@@ -1331,7 +1331,7 @@ class CRUDControllerTest extends TestCase
 
         $this->request->request->set('_sonata_csrf_token', 'csrf-token-123_sonata.delete');
 
-        $response = $this->controller->deleteAction(1, $this->request);
+        $response = $this->controller->deleteAction(1);
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame(['flash_delete_success'], $this->session->getFlashBag()->get('sonata_flash_success'));
@@ -1366,7 +1366,7 @@ class CRUDControllerTest extends TestCase
         $this->request->setMethod('POST');
         $this->request->request->set('_method', 'DELETE');
 
-        $response = $this->controller->deleteAction(1, $this->request);
+        $response = $this->controller->deleteAction(1);
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame(['flash_delete_success'], $this->session->getFlashBag()->get('sonata_flash_success'));
@@ -1389,7 +1389,7 @@ class CRUDControllerTest extends TestCase
         //without POST request parameter "_method" should not be used as real REST method
         $this->request->query->set('_method', 'DELETE');
 
-        $this->assertInstanceOf(Response::class, $this->controller->deleteAction(1, $this->request));
+        $this->assertInstanceOf(Response::class, $this->controller->deleteAction(1));
 
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('@SonataAdmin/standard_layout.html.twig', $this->parameters['base_template']);
@@ -1431,7 +1431,7 @@ class CRUDControllerTest extends TestCase
         $this->request->setMethod('DELETE');
         $this->request->request->set('_sonata_csrf_token', 'csrf-token-123_sonata.delete');
 
-        $response = $this->controller->deleteAction(1, $this->request);
+        $response = $this->controller->deleteAction(1);
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame(['flash_delete_error'], $this->session->getFlashBag()->get('sonata_flash_error'));
@@ -1456,7 +1456,7 @@ class CRUDControllerTest extends TestCase
         $this->request->request->set('_sonata_csrf_token', 'CSRF-INVALID');
 
         try {
-            $this->controller->deleteAction(1, $this->request);
+            $this->controller->deleteAction(1);
         } catch (HttpException $e) {
             $this->assertSame('The csrf token is not valid, CSRF attack?', $e->getMessage());
             $this->assertSame(400, $e->getStatusCode());
@@ -1471,7 +1471,7 @@ class CRUDControllerTest extends TestCase
             ->method('getObject')
             ->willReturn(false);
 
-        $this->controller->editAction(null, $this->request);
+        $this->controller->editAction(null);
     }
 
     public function testEditActionRuntimeException(): void
@@ -1497,7 +1497,7 @@ class CRUDControllerTest extends TestCase
             ->method('all')
             ->willReturn([]);
 
-        $this->controller->editAction(null, $this->request);
+        $this->controller->editAction(null);
     }
 
     public function testEditActionAccessDenied(): void
@@ -1513,7 +1513,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('edit'))
             ->will($this->throwException(new AccessDeniedException()));
 
-        $this->controller->editAction(null, $this->request);
+        $this->controller->editAction(null);
     }
 
     public function testPreEdit(): void
@@ -1533,7 +1533,7 @@ class CRUDControllerTest extends TestCase
         $controller = new PreCRUDController();
         $controller->setContainer($this->container);
 
-        $response = $controller->editAction(null, $this->request);
+        $response = $controller->editAction(null);
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame('preEdit called: 123456', $response->getContent());
     }
@@ -1567,7 +1567,7 @@ class CRUDControllerTest extends TestCase
             ->method('all')
             ->willReturn(['field' => 'fielddata']);
 
-        $this->assertInstanceOf(Response::class, $this->controller->editAction(null, $this->request));
+        $this->assertInstanceOf(Response::class, $this->controller->editAction(null));
 
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('@SonataAdmin/standard_layout.html.twig', $this->parameters['base_template']);
@@ -1640,7 +1640,7 @@ class CRUDControllerTest extends TestCase
 
         $this->request->setMethod('POST');
 
-        $response = $this->controller->editAction(null, $this->request);
+        $response = $this->controller->editAction(null);
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame(['flash_edit_success'], $this->session->getFlashBag()->get('sonata_flash_success'));
@@ -1696,7 +1696,7 @@ class CRUDControllerTest extends TestCase
             ->method('createView')
             ->willReturn($formView);
 
-        $this->assertInstanceOf(Response::class, $this->controller->editAction(null, $this->request));
+        $this->assertInstanceOf(Response::class, $this->controller->editAction(null));
 
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('@SonataAdmin/standard_layout.html.twig', $this->parameters['base_template']);
@@ -1761,7 +1761,7 @@ class CRUDControllerTest extends TestCase
         $this->request->setMethod('POST');
         $this->request->headers->set('X-Requested-With', 'XMLHttpRequest');
 
-        $response = $this->controller->editAction(null, $this->request);
+        $response = $this->controller->editAction(null);
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame(json_encode(['result' => 'ok', 'objectId' => 'foo_normalized', 'objectName' => 'foo']), $response->getContent());
@@ -1813,7 +1813,7 @@ class CRUDControllerTest extends TestCase
         $this->request->headers->set('X-Requested-With', 'XMLHttpRequest');
         $this->request->headers->set('Accept', 'application/json');
 
-        $this->assertInstanceOf(JsonResponse::class, $response = $this->controller->editAction(null, $this->request));
+        $this->assertInstanceOf(JsonResponse::class, $response = $this->controller->editAction(null));
         $this->assertJsonStringEqualsJsonString('{"result":"error","errors":["Form error message"]}', $response->getContent());
     }
 
@@ -1860,7 +1860,7 @@ class CRUDControllerTest extends TestCase
             ->method('createView')
             ->willReturn($formView);
 
-        $this->assertInstanceOf(Response::class, $response = $this->controller->editAction(null, $this->request));
+        $this->assertInstanceOf(Response::class, $response = $this->controller->editAction(null));
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('@SonataAdmin/ajax_layout.html.twig', $this->parameters['base_template']);
         $this->assertSame($this->pool, $this->parameters['admin_pool']);
@@ -1928,7 +1928,7 @@ class CRUDControllerTest extends TestCase
             ->willReturn($formView);
 
         $this->assertLoggerLogsModelManagerException($this->admin, 'update');
-        $this->assertInstanceOf(Response::class, $this->controller->editAction(null, $this->request));
+        $this->assertInstanceOf(Response::class, $this->controller->editAction(null));
 
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('@SonataAdmin/standard_layout.html.twig', $this->parameters['base_template']);
@@ -1986,7 +1986,7 @@ class CRUDControllerTest extends TestCase
         $this->request->setMethod('POST');
         $this->request->request->set('btn_preview', 'Preview');
 
-        $this->assertInstanceOf(Response::class, $this->controller->editAction(null, $this->request));
+        $this->assertInstanceOf(Response::class, $this->controller->editAction(null));
 
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('@SonataAdmin/standard_layout.html.twig', $this->parameters['base_template']);
@@ -2062,7 +2062,7 @@ class CRUDControllerTest extends TestCase
             '%link_end%' => '</a>',
         ], 'SonataAdminBundle');
 
-        $this->assertInstanceOf(Response::class, $this->controller->editAction(null, $this->request));
+        $this->assertInstanceOf(Response::class, $this->controller->editAction(null));
     }
 
     public function testCreateActionAccessDenied(): void
@@ -2776,7 +2776,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('history'))
             ->will($this->throwException(new AccessDeniedException()));
 
-        $this->controller->historyAction(null, $this->request);
+        $this->controller->historyAction(null);
     }
 
     public function testHistoryActionNotFoundException(): void
@@ -2787,7 +2787,7 @@ class CRUDControllerTest extends TestCase
             ->method('getObject')
             ->willReturn(false);
 
-        $this->controller->historyAction(null, $this->request);
+        $this->controller->historyAction(null);
     }
 
     public function testHistoryActionNoReader(): void
@@ -2817,7 +2817,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('Foo'))
             ->willReturn(false);
 
-        $this->controller->historyAction(null, $this->request);
+        $this->controller->historyAction(null);
     }
 
     public function testHistoryAction(): void
@@ -2856,7 +2856,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('Foo'), $this->equalTo(123))
             ->willReturn([]);
 
-        $this->assertInstanceOf(Response::class, $this->controller->historyAction(null, $this->request));
+        $this->assertInstanceOf(Response::class, $this->controller->historyAction(null));
 
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('@SonataAdmin/standard_layout.html.twig', $this->parameters['base_template']);
@@ -2875,7 +2875,7 @@ class CRUDControllerTest extends TestCase
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('ACL are not enabled for this admin');
 
-        $this->controller->aclAction(null, $this->request);
+        $this->controller->aclAction(null);
     }
 
     public function testAclActionNotFoundException(): void
@@ -2890,7 +2890,7 @@ class CRUDControllerTest extends TestCase
             ->method('getObject')
             ->willReturn(false);
 
-        $this->controller->aclAction(null, $this->request);
+        $this->controller->aclAction(null);
     }
 
     public function testAclActionAccessDenied(): void
@@ -2912,7 +2912,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('acl'), $this->equalTo($object))
             ->will($this->throwException(new AccessDeniedException()));
 
-        $this->controller->aclAction(null, $this->request);
+        $this->controller->aclAction(null);
     }
 
     public function testAclAction(): void
@@ -2979,7 +2979,7 @@ class CRUDControllerTest extends TestCase
             ->method('getSecurityHandler')
             ->willReturn($aclSecurityHandler);
 
-        $this->assertInstanceOf(Response::class, $this->controller->aclAction(null, $this->request));
+        $this->assertInstanceOf(Response::class, $this->controller->aclAction(null));
 
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('@SonataAdmin/standard_layout.html.twig', $this->parameters['base_template']);
@@ -3068,7 +3068,7 @@ class CRUDControllerTest extends TestCase
 
         $this->request->setMethod('POST');
 
-        $this->assertInstanceOf(Response::class, $this->controller->aclAction(null, $this->request));
+        $this->assertInstanceOf(Response::class, $this->controller->aclAction(null));
 
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('@SonataAdmin/standard_layout.html.twig', $this->parameters['base_template']);
@@ -3159,7 +3159,7 @@ class CRUDControllerTest extends TestCase
 
         $this->request->setMethod('POST');
 
-        $response = $this->controller->aclAction(null, $this->request);
+        $response = $this->controller->aclAction(null);
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
 
@@ -3180,7 +3180,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('historyViewRevision'))
             ->will($this->throwException(new AccessDeniedException()));
 
-        $this->controller->historyViewRevisionAction(null, null, $this->request);
+        $this->controller->historyViewRevisionAction(null, null);
     }
 
     public function testHistoryViewRevisionActionNotFoundException(): void
@@ -3194,7 +3194,7 @@ class CRUDControllerTest extends TestCase
             ->method('getObject')
             ->willReturn(false);
 
-        $this->controller->historyViewRevisionAction(null, null, $this->request);
+        $this->controller->historyViewRevisionAction(null, null);
     }
 
     public function testHistoryViewRevisionActionNoReader(): void
@@ -3224,7 +3224,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('Foo'))
             ->willReturn(false);
 
-        $this->controller->historyViewRevisionAction(null, null, $this->request);
+        $this->controller->historyViewRevisionAction(null, null);
     }
 
     public function testHistoryViewRevisionActionNotFoundRevision(): void
@@ -3266,7 +3266,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('Foo'), $this->equalTo(123), $this->equalTo(456))
             ->willReturn(null);
 
-        $this->controller->historyViewRevisionAction(123, 456, $this->request);
+        $this->controller->historyViewRevisionAction(123, 456);
     }
 
     public function testHistoryViewRevisionAction(): void
@@ -3318,7 +3318,7 @@ class CRUDControllerTest extends TestCase
             ->method('getShow')
             ->willReturn($fieldDescriptionCollection);
 
-        $this->assertInstanceOf(Response::class, $this->controller->historyViewRevisionAction(123, 456, $this->request));
+        $this->assertInstanceOf(Response::class, $this->controller->historyViewRevisionAction(123, 456));
 
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('@SonataAdmin/standard_layout.html.twig', $this->parameters['base_template']);
@@ -3341,7 +3341,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('historyCompareRevisions'))
             ->will($this->throwException(new AccessDeniedException()));
 
-        $this->controller->historyCompareRevisionsAction(null, null, null, $this->request);
+        $this->controller->historyCompareRevisionsAction(null, null, null);
     }
 
     public function testHistoryCompareRevisionsActionNotFoundException(): void
@@ -3360,7 +3360,7 @@ class CRUDControllerTest extends TestCase
             ->method('getObject')
             ->willReturn(false);
 
-        $this->controller->historyCompareRevisionsAction(null, null, null, $this->request);
+        $this->controller->historyCompareRevisionsAction(null, null, null);
     }
 
     public function testHistoryCompareRevisionsActionNoReader(): void
@@ -3390,7 +3390,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('Foo'))
             ->willReturn(false);
 
-        $this->controller->historyCompareRevisionsAction(null, null, null, $this->request);
+        $this->controller->historyCompareRevisionsAction(null, null, null);
     }
 
     public function testHistoryCompareRevisionsActionNotFoundBaseRevision(): void
@@ -3433,7 +3433,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('Foo'), $this->equalTo(123), $this->equalTo(456))
             ->willReturn(null);
 
-        $this->controller->historyCompareRevisionsAction(123, 456, 789, $this->request);
+        $this->controller->historyCompareRevisionsAction(123, 456, 789);
     }
 
     public function testHistoryCompareRevisionsActionNotFoundCompareRevision(): void
@@ -3484,7 +3484,7 @@ class CRUDControllerTest extends TestCase
             ->with($this->equalTo('Foo'), $this->equalTo(123), $this->equalTo(789))
             ->willReturn(null);
 
-        $this->controller->historyCompareRevisionsAction(123, 456, 789, $this->request);
+        $this->controller->historyCompareRevisionsAction(123, 456, 789);
     }
 
     public function testHistoryCompareRevisionsActionAction(): void
@@ -3544,7 +3544,7 @@ class CRUDControllerTest extends TestCase
             ->method('getShow')
             ->willReturn($fieldDescriptionCollection);
 
-        $this->assertInstanceOf(Response::class, $this->controller->historyCompareRevisionsAction(123, 456, 789, $this->request));
+        $this->assertInstanceOf(Response::class, $this->controller->historyCompareRevisionsAction(123, 456, 789));
 
         $this->assertSame($this->admin, $this->parameters['admin']);
         $this->assertSame('@SonataAdmin/standard_layout.html.twig', $this->parameters['base_template']);
