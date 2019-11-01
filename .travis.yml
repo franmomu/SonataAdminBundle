@@ -6,6 +6,7 @@ branches:
   only:
     - master
     - 3.x
+    - remove_travis_fixed_code
 
 language: php
 
