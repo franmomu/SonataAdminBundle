@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace Sonata\AdminBundle\Form\Type\Filter;
 
-use Sonata\CoreBundle\Form\Type\DateRangeType as FormDateRangeType;
+use Sonata\Form\Type\DateRangeType as FormDateRangeType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType as FormChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -78,13 +77,6 @@ class DateRangeType extends AbstractType
             ->add('type', FormChoiceType::class, $choiceOptions)
             ->add('value', $options['field_type'], $options['field_options'])
         ;
-    }
-
-    // NEXT_MAJOR: Remove method, when bumping requirements to SF 2.7+
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver): void
-    {
-        $this->configureOptions($resolver);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

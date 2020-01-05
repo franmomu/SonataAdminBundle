@@ -54,7 +54,7 @@ cs-fix-xml:
 build:
 	mkdir $@
 
-HAS_XDEBUG=$(shell php --modules|grep --quiet xdebug;echo $$?)
+HAS_XDEBUG=1
 
 build/xdebug-filter.php: phpunit.xml.dist build
 ifeq ($(HAS_XDEBUG), 0)
