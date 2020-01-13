@@ -58,6 +58,8 @@ install:
   - if [ -x .travis/install_${TARGET}.sh ]; then .travis/install_${TARGET}.sh; fi;
 
 before_script:
+  - phpenv config-rm xdebug.ini
+  - pecl install -f xdebug-2.9.0
   - if [ -x .travis/before_script_${TARGET}.sh ]; then .travis/before_script_${TARGET}.sh; fi;
 
 script: make $TARGET
