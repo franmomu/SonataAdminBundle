@@ -44,7 +44,7 @@ class ListAdminCommand extends Command
         $this->setDescription('List all admin services available');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): void
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('<info>Admin services:</info>');
         foreach ($this->pool->getAdminServiceIds() as $id) {
@@ -54,5 +54,7 @@ class ListAdminCommand extends Command
                 $instance->getClass()
             ));
         }
+
+        return 0;
     }
 }
