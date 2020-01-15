@@ -514,6 +514,10 @@ CASESENSITIVE;
                     ->info('Translate group label')
                 ->end()
 
+                ->booleanNode('use_intl_templates')
+                    ->defaultFalse()
+                ->end()
+
             ->end()
         ->end();
 
