@@ -72,20 +72,7 @@ final class AppKernel extends Kernel
 
     protected function configureContainer(ContainerBuilder $containerBuilder, LoaderInterface $loader)
     {
-        $containerBuilder->loadFromExtension('framework', [
-            'secret' => 'MySecret',
-            'form' => ['enabled' => true],
-            'session' => ['handler_id' => null, 'storage_id' => 'session.storage.mock_file', 'name' => 'MOCKSESSID'],
-            'templating' => ['engine' => ['twig']],
-            'test' => true,
-        ]);
-
-        $containerBuilder->loadFromExtension('security', [
-            'firewalls' => ['main' => ['anonymous' => true]],
-            'providers' => ['in_memory' => ['memory' => null]],
-        ]);
-
-        $loader->load($this->getProjectDir().'/config/services.yml');
+        $loader->load($this->getProjectDir().'/config/config.yml');
     }
 
     private function getBaseDir(): string
