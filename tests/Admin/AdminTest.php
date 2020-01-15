@@ -66,9 +66,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Mapping\MemberMetadata;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AdminTest extends TestCase
 {
@@ -1406,43 +1406,6 @@ class AdminTest extends TestCase
             ->willReturn('fooTranslated');
 
         $this->assertSame('fooTranslated', $admin->trans('foo', ['name' => 'Andrej'], 'fooMessageDomain'));
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testTransChoice(): void
-    {
-        $admin = new PostAdmin('sonata.post.admin.post', 'NewsBundle\Entity\Post', 'SonataNewsBundle:PostAdmin');
-        $admin->setTranslationDomain('fooMessageDomain');
-
-        $translator = $this->createMock(TranslatorInterface::class);
-        $admin->setTranslator($translator);
-
-        $translator->expects($this->once())
-            ->method('transChoice')
-            ->with($this->equalTo('foo'), $this->equalTo(2), $this->equalTo([]), $this->equalTo('fooMessageDomain'))
-            ->willReturn('fooTranslated');
-
-        $this->assertSame('fooTranslated', $admin->transChoice('foo', 2));
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testTransChoiceWithMessageDomain(): void
-    {
-        $admin = new PostAdmin('sonata.post.admin.post', 'NewsBundle\Entity\Post', 'SonataNewsBundle:PostAdmin');
-
-        $translator = $this->createMock(TranslatorInterface::class);
-        $admin->setTranslator($translator);
-
-        $translator->expects($this->once())
-            ->method('transChoice')
-            ->with($this->equalTo('foo'), $this->equalTo(2), $this->equalTo(['name' => 'Andrej']), $this->equalTo('fooMessageDomain'))
-            ->willReturn('fooTranslated');
-
-        $this->assertSame('fooTranslated', $admin->transChoice('foo', 2, ['name' => 'Andrej'], 'fooMessageDomain'));
     }
 
     public function testSetFilterPersister(): void

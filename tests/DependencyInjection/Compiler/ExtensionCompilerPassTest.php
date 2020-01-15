@@ -25,8 +25,6 @@ use Sonata\AdminBundle\DependencyInjection\SonataAdminExtension;
 use Sonata\AdminBundle\Tests\Fixtures\DependencyInjection\TimestampableTrait;
 use Sonata\BlockBundle\DependencyInjection\SonataBlockExtension;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
-use Symfony\Bundle\FrameworkBundle\Translation\TranslatorInterface;
-use Symfony\Bundle\FrameworkBundle\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -37,7 +35,10 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 class ExtensionCompilerPassTest extends TestCase
 {
@@ -344,7 +345,7 @@ class ExtensionCompilerPassTest extends TestCase
         // Add dependencies for SonataAdminBundle (these services will never get called so dummy classes will do)
         $container
             ->register('twig')
-            ->setClass(EngineInterface::class);
+            ->setClass(Environment::class);
         $container
             ->register('templating')
             ->setClass(EngineInterface::class);

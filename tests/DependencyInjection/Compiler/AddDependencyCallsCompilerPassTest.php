@@ -25,8 +25,6 @@ use Sonata\BlockBundle\DependencyInjection\SonataBlockExtension;
 use Sonata\DoctrinePHPCRAdminBundle\Route\PathInfoBuilderSlashes;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
-use Symfony\Bundle\FrameworkBundle\Translation\TranslatorInterface;
-use Symfony\Bundle\FrameworkBundle\Validator\Validator;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -40,6 +38,9 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Validator\ContainerConstraintValidatorFactory;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 /**
  * @author Tiago Garcia
@@ -640,7 +641,7 @@ class AddDependencyCallsCompilerPassTest extends TestCase
         // Add dependencies for SonataAdminBundle (these services will never get called so dummy classes will do)
         $container
             ->register('twig')
-            ->setClass(EngineInterface::class);
+            ->setClass(Environment::class);
         $container
             ->register('templating')
             ->setClass(EngineInterface::class);
@@ -649,7 +650,7 @@ class AddDependencyCallsCompilerPassTest extends TestCase
             ->setClass(TranslatorInterface::class);
         $container
             ->register('validator')
-            ->setClass(Validator::class);
+            ->setClass(ValidatorInterface::class);
         $container
             ->register('validator.validator_factory')
             ->setClass(ContainerConstraintValidatorFactory::class);
