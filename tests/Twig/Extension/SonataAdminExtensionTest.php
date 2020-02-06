@@ -162,7 +162,7 @@ class SonataAdminExtensionTest extends TestCase
         $this->securityChecker->isGranted(Argument::type('string'), null)->willReturn(true);
 
         $this->twigExtension = new SonataAdminExtension(
-            $this->pool, $this->logger, $this->translator, $this->container->reveal(), $this->securityChecker->reveal()
+            $this->pool, $this->translator, $this->logger, $this->container->reveal(), $this->securityChecker->reveal()
         );
         $this->twigExtension->setXEditableTypeMapping($this->xEditableTypeMapping);
 

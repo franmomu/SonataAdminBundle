@@ -80,18 +80,11 @@ final class SonataAdminExtension extends AbstractExtension
 
     public function __construct(
         Pool $pool,
+        TranslatorInterface $translator,
         LoggerInterface $logger = null,
-        TranslatorInterface $translator = null,
         ContainerInterface $templateRegistries = null,
         AuthorizationCheckerInterface $securityChecker = null
     ) {
-        // NEXT_MAJOR: make the translator parameter required
-        if (null === $translator) {
-            @trigger_error(
-                'The $translator parameter will be required fields with the 4.0 release.',
-                E_USER_DEPRECATED
-            );
-        }
         $this->pool = $pool;
         $this->logger = $logger;
         $this->translator = $translator;
