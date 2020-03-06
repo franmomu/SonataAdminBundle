@@ -535,6 +535,18 @@ CASESENSITIVE;
                 ->booleanNode('translate_group_label')
                     ->defaultFalse()
                     ->info('Translate group label')
+                    ->validate()
+                        ->ifTrue()
+                        ->then(static function (bool $v): bool {
+                            @trigger_error(
+                                'The translate_group_label option is deprecated since'.
+                                ' sonata-project/admin-bundle 3.x and will be removed in 4.0.',
+                                E_USER_DEPRECATED
+                            );
+
+                            return $v;
+                        })
+                    ->end()
                 ->end()
 
             ->end()

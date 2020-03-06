@@ -356,6 +356,20 @@ class SonataAdminExtensionTest extends AbstractExtensionTestCase
         $this->assertNull($this->container->getDefinition('sonata.string.twig.extension')->getArgument(0));
     }
 
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @group legacy
+     */
+    public function testDeprecatedTranslateGroupLabel(): void
+    {
+        $this->load([
+            'translate_group_label' => true,
+        ]);
+
+        $this->assertTrue($this->container->getParameter('sonata.admin.configuration.translate_group_label'));
+    }
+
     protected function getContainerExtensions(): array
     {
         return [new SonataAdminExtension()];

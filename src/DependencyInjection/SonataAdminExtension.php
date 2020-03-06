@@ -194,6 +194,7 @@ class SonataAdminExtension extends Extension implements PrependExtensionInterfac
 
         $container->setParameter('sonata.admin.configuration.show.mosaic.button', $config['show_mosaic_button']);
 
+        // NEXT_MAJOR : remove this parameter
         $container->setParameter('sonata.admin.configuration.translate_group_label', $config['translate_group_label']);
 
         $this->replacePropertyAccessor($container);
