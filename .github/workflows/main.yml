@@ -1,12 +1,10 @@
 on: [pull_request]
-name: Test PR
+name: How to test a PR
 jobs:
-  test:
-    name: test pr
+  composer-test-pr:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: test
-      uses: franmomu/github-actions-test@master
+    - name: Composer Test PR
+      uses: franmomu/composer-test-pr@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
