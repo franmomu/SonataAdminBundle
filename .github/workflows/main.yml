@@ -4,7 +4,9 @@ jobs:
   composer-test-pr:
     runs-on: ubuntu-latest
     steps:
-    - name: Composer Test PR
-      uses: franmomu/composer-test-pr@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@master
+      - name: test
+      - name: Composer Test PR
+        uses: franmomu/composer-test-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
