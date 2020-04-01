@@ -1,4 +1,6 @@
-on: [pull_request]
+on:
+  pull_request:
+    types: [opened]
 name: How to test a PR
 jobs:
   composer-test-pr:
