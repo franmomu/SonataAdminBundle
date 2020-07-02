@@ -3781,7 +3781,7 @@ class CRUDControllerTest extends TestCase
      *
      * @group legacy
      */
-    public function testBatchActionWithRequesData(): void
+    public function testBatchActionWithRequestData(): void
     {
         $batchActions = ['delete' => ['label' => 'Foo Bar', 'ask_confirmation' => false]];
 
