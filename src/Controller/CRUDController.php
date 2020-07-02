@@ -512,8 +512,10 @@ class CRUDController implements ContainerAwareInterface
 
         $query = $datagrid->getQuery();
 
-        $query->setFirstResult(null);
-        $query->setMaxResults(null);
+        if ($allElements) {
+            $query->setFirstResult(null);
+            $query->setMaxResults(null);
+        }
 
         $this->admin->preBatchAction($action, $query, $idx, $allElements);
 

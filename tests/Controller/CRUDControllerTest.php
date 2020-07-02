@@ -3658,6 +3658,52 @@ class CRUDControllerTest extends TestCase
         $this->assertSame('custom_template.html.twig', $this->template);
     }
 
+    public function testBatchActionWithAllElements(): void
+    {
+        $controller = new BatchAdminController();
+        $controller->setContainer($this->container);
+
+        $batchActions = ['bar' => ['label' => 'Foo Bar', 'ask_confirmation' => false]];
+
+        $this->admin->expects($this->once())
+            ->method('getBatchActions')
+            ->willReturn($batchActions);
+
+        $datagrid = $this->createMock(DatagridInterface::class);
+
+        $query = $this->createMock(ProxyQueryInterface::class);
+        $datagrid->expects($this->once())
+            ->method('getQuery')
+            ->willReturn($query);
+
+        $query->expects($this->once())
+            ->method('setFirstResult');
+        $query->expects($this->once())
+            ->method('setMaxResults');
+
+        $this->admin->expects($this->once())
+            ->method('getDatagrid')
+            ->willReturn($datagrid);
+
+        $modelManager = $this->createStub(ModelManagerInterface::class);
+
+        $this->admin
+            ->method('getModelManager')
+            ->willReturn($modelManager);
+
+        $this->admin
+            ->method('getClass')
+            ->willReturn('Foo');
+
+        $this->request->setMethod(Request::METHOD_POST);
+        $this->request->request->set('action', 'bar');
+        $this->request->request->set('idx', []);
+        $this->request->request->set('_sonata_csrf_token', 'csrf-token-123_sonata.batch');
+        $this->request->request->set('all_elements', true);
+
+        $controller->batchAction();
+    }
+
     /**
      * NEXT_MAJOR: Remove this legacy group.
      *
