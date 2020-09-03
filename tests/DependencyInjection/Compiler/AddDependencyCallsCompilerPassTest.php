@@ -25,7 +25,6 @@ use Sonata\BlockBundle\DependencyInjection\SonataBlockExtension;
 use Sonata\DoctrinePHPCRAdminBundle\Route\PathInfoBuilderSlashes;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
-use Symfony\Bundle\FrameworkBundle\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Validator\Validator;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -39,7 +38,9 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Translation\TranslatorInterface as LegacyTranslatorInterface;
 use Symfony\Component\Validator\ContainerConstraintValidatorFactory;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @author Tiago Garcia
@@ -84,6 +85,39 @@ class AddDependencyCallsCompilerPassTest extends TestCase
         $compilerPass = new AddDependencyCallsCompilerPass();
         $compilerPass->process($container);
         $container->compile();
+    }
+
+    public function testTranslatorIsSet(): void
+    {
+        $container = $this->getContainer();
+        $this->extension->load([$this->config], $container);
+
+        $compilerPass = new AddDependencyCallsCompilerPass();
+        $compilerPass->process($container);
+        $container->compile();
+
+        $adminDefinition = $container->getDefinition('sonata_news_admin');
+
+        $this->assertTrue($adminDefinition->hasMethodCall('setContractTranslator'));
+    }
+
+    public function testLegacyTranslatorIsSet(): void
+    {
+        $container = $this->getContainer();
+        $container->removeDefinition('translator');
+        $container
+            ->register('translator')
+            ->setClass(Translator::class);
+        $this->extension->load([$this->config], $container);
+
+        $compilerPass = new AddDependencyCallsCompilerPass();
+        $compilerPass->process($container);
+        $container->compile();
+
+        $adminDefinition = $container->getDefinition('sonata_news_admin');
+
+        $this->assertTrue($adminDefinition->hasMethodCall('setContractTranslator'));
+        $this->assertTrue($adminDefinition->hasMethodCall('setTranslator'));
     }
 
     /**

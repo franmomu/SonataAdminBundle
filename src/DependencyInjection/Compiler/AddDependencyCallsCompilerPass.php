@@ -22,6 +22,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Translation\TranslatorInterface as LegacyTranslatorInterface;
 
 /**
  * Add all dependencies to the Admin class, this avoid to write too many lines
@@ -276,7 +277,7 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
             'show_builder' => sprintf('sonata.admin.builder.%s_show', $managerType),
             'list_builder' => sprintf('sonata.admin.builder.%s_list', $managerType),
             'datagrid_builder' => sprintf('sonata.admin.builder.%s_datagrid', $managerType),
-            'translator' => 'translator',
+            'contract_translator' => 'translator',
             'configuration_pool' => 'sonata.admin.pool',
             'route_generator' => 'sonata.admin.route.default_generator',
             'validator' => 'validator',
@@ -286,6 +287,9 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
                 (('doctrine_phpcr' === $managerType) ? '_slashes' : ''),
             'label_translator_strategy' => 'sonata.admin.label.strategy.native',
         ];
+        if ($container->hasDefinition('translator') && in_array(LegacyTranslatorInterface::class, class_implements($container->getDefinition('translator')->getClass()), true)) {
+            $defaultAddServices['translator'] = 'translator';
+        }
 
         $definition->addMethodCall('setManagerType', [$managerType]);
 

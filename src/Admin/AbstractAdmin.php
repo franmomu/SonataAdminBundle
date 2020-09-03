@@ -2466,11 +2466,9 @@ EOT;
      *
      * NEXT_MAJOR: remove this method
      *
-     * @param LegacyTranslatorInterface|TranslatorInterface $translator
-     *
      * @deprecated since sonata-project/admin-bundle 3.9, to be removed with 4.0
      */
-    public function setTranslator(object $translator)
+    public function setTranslator(LegacyTranslatorInterface $translator)
     {
         $args = \func_get_args();
         if (isset($args[1]) && $args[1]) {
@@ -2480,16 +2478,11 @@ EOT;
             ), E_USER_DEPRECATED);
         }
 
-        if (!$translator instanceof LegacyTranslatorInterface && !$translator instanceof TranslatorInterface) {
-            throw new \TypeError(sprintf(
-                'Argument 1 passed to "%s()" must be an instance of "%s" or "%s", instance of "%s" given.',
-                __METHOD__,
-                LegacyTranslatorInterface::class,
-                TranslatorInterface::class,
-                \get_class($translator)
-            ));
-        }
+        $this->translator = $translator;
+    }
 
+    public function setContractTranslator(TranslatorInterface $translator): void
+    {
         $this->translator = $translator;
     }
 
