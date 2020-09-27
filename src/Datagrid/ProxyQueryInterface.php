@@ -44,7 +44,7 @@ interface ProxyQueryInterface
     public function setSortBy($parentAssociationMappings, $fieldMapping);
 
     /**
-     * @return string|null
+     * @return string|array|null
      */
     public function getSortBy();
 
