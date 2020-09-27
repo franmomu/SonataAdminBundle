@@ -159,7 +159,7 @@ class SonataAdminExtensionTest extends TestCase
         $this->container->method('get')->with('sonata_admin_foo_service.template_registry')
             ->willReturn($this->templateRegistry);
 
-        $this->securityChecker = $this->createStub(AuthorizationCheckerInterface::class);
+        $this->securityChecker = $this->createMock(AuthorizationCheckerInterface::class);
 
         $this->twigExtension = new SonataAdminExtension(
             $this->pool,
@@ -2963,17 +2963,18 @@ EOT
 
     public function testIsGrantedAffirmative(): void
     {
-        $this->securityChecker->method('isGranted')->willReturnCallback(static function (string $role): bool {
-            if ('foo' === $role) {
-                return false;
-            }
-
-            if ('bar' === $role) {
-                return true;
-            }
-
-            return false;
-        });
+        $this->securityChecker
+            ->method('isGranted')
+            ->withConsecutive(
+                ['foo', null],
+                ['bar', null],
+                ['foo', null],
+                ['bar', null]
+            )
+            ->willReturnMap([
+                ['foo', null, false],
+                ['bar', null, true],
+            ]);
 
         $this->assertTrue($this->twigExtension->isGrantedAffirmative(['foo', 'bar']));
         $this->assertFalse($this->twigExtension->isGrantedAffirmative('foo'));
