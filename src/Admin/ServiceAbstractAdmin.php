@@ -26,16 +26,16 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
- *
  * @phpstan-template T of object
  * @phpstan-extends AbstractAdmin<T>
  */
 abstract class ServiceAbstractAdmin extends AbstractAdmin implements ServiceSubscriberInterface, ServiceAdminInterfaceInterface
 {
+    protected $container;
+
     public function __construct(string $modelClass)
     {
-        parent::__construct('sonata_deprecation_mute', $modelClass, 'sonata_deprecation_mute');
+        parent::__construct('', $modelClass, '');
     }
 
     public function withCode(string $code): void
@@ -43,7 +43,10 @@ abstract class ServiceAbstractAdmin extends AbstractAdmin implements ServiceSubs
         $this->code = $code;
     }
 
-    protected $container;
+    public function withBaseControllerName(string $baseControllerName): void
+    {
+        $this->baseControllerName = $baseControllerName;
+    }
 
     /**
      * @internal
@@ -56,43 +59,37 @@ abstract class ServiceAbstractAdmin extends AbstractAdmin implements ServiceSubs
     public static function getSubscribedServices(): array
     {
         return [
-            TranslatorInterface::class => TranslatorInterface::class,
-            Pool::class => Pool::class,
-            RouteGeneratorInterface::class => DefaultRouteGenerator::class,
-            FactoryInterface::class => MenuFactory::class,
-            RouteBuilderInterface::class => PathInfoBuilder::class,
-            LabelTranslatorStrategyInterface::class => NativeLabelTranslatorStrategy::class,
         ];
     }
 
     public function getTranslator()
     {
-        return $this->container->get(TranslatorInterface::class);
+        return $this->container->get('translator');
     }
 
     public function getConfigurationPool()
     {
-        return $this->container->get(Pool::class);
+        return $this->container->get('configuration_pool');
     }
 
     public function getRouteGenerator()
     {
-        return $this->container->get(RouteGeneratorInterface::class);
+        return $this->container->get('route_generator');
     }
 
     public function getMenuFactory()
     {
-        return $this->container->get(FactoryInterface::class);
+        return $this->container->get('menu_factory');
     }
 
     public function getRouteBuilder()
     {
-        return $this->container->get(RouteBuilderInterface::class);
+        return $this->container->get('route_builder');
     }
 
     public function getLabelTranslatorStrategy()
     {
-        return $this->container->get(LabelTranslatorStrategyInterface::class);
+        return $this->container->get('label_translator_strategy');
     }
 }
 

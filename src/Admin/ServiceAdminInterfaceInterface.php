@@ -16,4 +16,6 @@ namespace Sonata\AdminBundle\Admin;
 interface ServiceAdminInterfaceInterface
 {
     public function withCode(string $code): void;
+
+    public function withBaseControllerName(string $baseControllerName): void;
 }

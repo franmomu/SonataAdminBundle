@@ -14,27 +14,17 @@ declare(strict_types=1);
 namespace Sonata\AdminBundle\DependencyInjection\Compiler;
 
 use Doctrine\Inflector\InflectorFactory;
-use Sonata\AdminBundle\Admin\ServiceAdminInterfaceInterface;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Sonata\AdminBundle\Datagrid\Pager;
 use Sonata\AdminBundle\DependencyInjection\Admin\TaggedAdminInterface;
 use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-/**
- * Add all dependencies to the Admin class, this avoid to write too many lines
- * in the configuration files.
- *
- * @final since sonata-project/admin-bundle 3.52
- *
- * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
- */
-class AddDependencyCallsCompilerPass implements CompilerPassInterface
+final class ServiceAdminCompilerPass implements CompilerPassInterface
 {
     public const SERVICE_ADMIN_TAG = 'admin.service';
 
@@ -54,7 +44,6 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
         $groupDefaults = $admins = $classes = [];
 
         $pool = $container->getDefinition('sonata.admin.pool');
-        $defaultController = $container->getParameter('sonata.admin.configuration.default_controller');
 
         $defaultValues = [
             'group' => $container->getParameter('sonata.admin.configuration.default_group'),
@@ -63,29 +52,23 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
         ];
 
         foreach ($container->findTaggedServiceIds(TaggedAdminInterface::ADMIN_TAG) as $id => $tags) {
-
-            $definition = $container->getDefinition($id);
-            $parentDefinition = null;
-
-            // Temporary fix until we can support service locators
-            $definition->setPublic(true);
-
-            if ($definition instanceof ChildDefinition) {
-                $parentDefinition = $container->getDefinition($definition->getParent());
-            }
-
-            $this->replaceDefaultArguments([
-                0 => $id,
-                2 => $defaultController,
-            ], $definition, $parentDefinition);
-
             foreach ($tags as $attributes) {
-                if (is_a($definition->getClass(), ServiceAdminInterfaceInterface::class, true)) {
-                    $this->applyServiceConfiguration($container, $id, $attributes);
-                } else {
-                    $this->applyConfigurationFromAttribute($definition, $attributes);
-                    $this->applyDefaults($container, $id, $attributes);
+                $definition = $container->getDefinition($id);
+                $parentDefinition = null;
+
+                // Temporary fix until we can support service locators
+                $definition->setPublic(true);
+
+                if ($definition instanceof ChildDefinition) {
+                    $parentDefinition = $container->getDefinition($definition->getParent());
                 }
+
+                $this->replaceDefaultArguments([
+                    0 => $id,
+                    2 => CRUDController::class,
+                ], $definition, $parentDefinition);
+                $this->applyConfigurationFromAttribute($definition, $attributes);
+                $this->applyDefaults($container, $id, $attributes);
 
                 $arguments = $parentDefinition ?
                     array_merge($parentDefinition->getArguments(), $definition->getArguments()) :
@@ -220,14 +203,9 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
             $groups = $groupDefaults;
         }
 
-        // NEXT_MAJOR: Remove the following 3 lines
-        $pool->addMethodCall('setAdminServiceIds', [$admins, 'sonata_deprecation_mute']);
-        $pool->addMethodCall('setAdminGroups', [$groups, 'sonata_deprecation_mute']);
-        $pool->addMethodCall('setAdminClasses', [$classes, 'sonata_deprecation_mute']);
-
-        $pool->replaceArgument(1, $admins);
-        $pool->replaceArgument(2, $groups);
-        $pool->replaceArgument(3, $classes);
+        $pool->addMethodCall('setAdminServiceIds', [$admins]);
+        $pool->addMethodCall('setAdminGroups', [$groups]);
+        $pool->addMethodCall('setAdminClasses', [$classes]);
 
         $routeLoader = $container->getDefinition('sonata.admin.route_loader');
         $routeLoader->replaceArgument(1, $admins);
@@ -330,83 +308,6 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
         $definition->addMethodCall('setPagerType', [$pagerType]);
 
         // NEXT_MAJOR: Default to null
-        $label = $overwriteAdminConfiguration['label'] ?? $attributes['label'] ?? '-';
-        $definition->addMethodCall('setLabel', [$label]);
-
-        $persistFilters = $attributes['persist_filters']
-            ?? $container->getParameter('sonata.admin.configuration.filters.persist');
-        $filtersPersister = $attributes['filter_persister']
-            ?? $container->getParameter('sonata.admin.configuration.filters.persister');
-
-        // configure filters persistence, if configured to
-        if ($persistFilters) {
-            $definition->addMethodCall('setFilterPersister', [new Reference($filtersPersister)]);
-        }
-
-        $showMosaicButton = $overwriteAdminConfiguration['show_mosaic_button']
-            ?? $attributes['show_mosaic_button']
-            ?? $container->getParameter('sonata.admin.configuration.show.mosaic.button');
-        $definition->addMethodCall('showMosaicButton', [$showMosaicButton]);
-
-        $this->fixTemplates(
-            $serviceId,
-            $container,
-            $definition,
-            $overwriteAdminConfiguration['templates'] ?? ['view' => []]
-        );
-
-        if ($container->hasParameter('sonata.admin.configuration.security.information') && !$definition->hasMethodCall('setSecurityInformation')) {
-            $definition->addMethodCall('setSecurityInformation', ['%sonata.admin.configuration.security.information%']);
-        }
-
-        $definition->addMethodCall('initialize');
-
-        return $definition;
-    }
-
-    public function applyServiceConfiguration(ContainerBuilder $container, $serviceId, array $attributes = [])
-    {
-        $definition = $container->getDefinition($serviceId);
-        $settings = $container->getParameter('sonata.admin.configuration.admin_services');
-
-        $definition->setShared(false);
-
-        $managerType = $attributes['manager_type'];
-
-        $overwriteAdminConfiguration = $settings[$serviceId] ?? [];
-
-        $defaultAddServices = [
-            'model_manager' => sprintf('sonata.admin.manager.%s', $managerType),
-            'data_source' => sprintf('sonata.admin.data_source.%s', $managerType),
-            'form_contractor' => sprintf('sonata.admin.builder.%s_form', $managerType),
-            'show_builder' => sprintf('sonata.admin.builder.%s_show', $managerType),
-            'list_builder' => sprintf('sonata.admin.builder.%s_list', $managerType),
-            'datagrid_builder' => sprintf('sonata.admin.builder.%s_datagrid', $managerType),
-            'translator' => 'translator',
-            'configuration_pool' => 'sonata.admin.pool',
-            'route_generator' => 'sonata.admin.route.default_generator',
-            'validator' => 'validator', //NEXT_MAJOR: Remove this line
-            'security_handler' => 'sonata.admin.security.handler',
-            'menu_factory' => 'knp_menu.factory',
-            'route_builder' => 'sonata.admin.route.path_info'.
-                (('doctrine_phpcr' === $managerType) ? '_slashes' : ''),
-            'label_translator_strategy' => 'sonata.admin.label.strategy.native',
-        ];
-
-        $definition->addMethodCall('setManagerType', [$managerType]);
-
-        $services = [];
-
-        foreach ($defaultAddServices as $attr => $addServiceId) {
-            $services[$attr] = new Reference($overwriteAdminConfiguration[$attr] ?? $addServiceId);
-        }
-
-        $definition->addMethodCall('setContainer', [ServiceLocatorTagPass::register($container, $services)]);
-        $definition->addMethodCall('withCode', [$serviceId]);
-
-        $pagerType = $overwriteAdminConfiguration['pager_type'] ?? $attributes['pager_type'] ?? Pager::TYPE_DEFAULT;
-        $definition->addMethodCall('setPagerType', [$pagerType]);
-
         $label = $overwriteAdminConfiguration['label'] ?? $attributes['label'] ?? '-';
         $definition->addMethodCall('setLabel', [$label]);
 
