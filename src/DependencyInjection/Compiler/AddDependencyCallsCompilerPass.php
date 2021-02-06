@@ -238,6 +238,7 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
         $keys = [
             'model_manager',
             'data_source',
+            'field_description_factory',
             'form_contractor',
             'show_builder',
             'list_builder',
@@ -286,6 +287,7 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
         $defaultAddServices = [
             'model_manager' => sprintf('sonata.admin.manager.%s', $managerType),
             'data_source' => sprintf('sonata.admin.data_source.%s', $managerType),
+            'field_description_factory' => sprintf('sonata.admin.field_description_factory.%s', $managerType),
             'form_contractor' => sprintf('sonata.admin.builder.%s_form', $managerType),
             'show_builder' => sprintf('sonata.admin.builder.%s_show', $managerType),
             'list_builder' => sprintf('sonata.admin.builder.%s_list', $managerType),
@@ -306,6 +308,11 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
         foreach ($defaultAddServices as $attr => $addServiceId) {
             // NEXT_MAJOR: Remove this check
             if ('data_source' === $attr && !$container->has($addServiceId)) {
+                continue;
+            }
+
+            // NEXT_MAJOR: Remove this check
+            if ('field_description_factory' === $attr && !$container->has($addServiceId)) {
                 continue;
             }
 
