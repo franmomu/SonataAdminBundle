@@ -117,6 +117,7 @@ class DatagridMapper extends BaseMapper
             // NEXT_MAJOR: Remove the check and use `createFieldDescription`.
             if (method_exists($this->admin, 'createFieldDescription')) {
                 $fieldDescription = $this->admin->createFieldDescription(
+                    FieldDescriptionInterface::FILTER_CONTEXT,
                     $name,
                     array_merge($filterOptions, $fieldDescriptionOptions)
                 );

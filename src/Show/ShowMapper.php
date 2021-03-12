@@ -75,6 +75,7 @@ class ShowMapper extends BaseGroupedMapper
                 // NEXT_MAJOR: Remove the check and use `createFieldDescription`.
                 if (method_exists($this->admin, 'createFieldDescription')) {
                     $fieldDescription = $this->admin->createFieldDescription(
+                        FieldDescriptionInterface::SHOW_CONTEXT,
                         $name,
                         $fieldDescriptionOptions
                     );

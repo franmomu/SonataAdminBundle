@@ -147,6 +147,7 @@ class ListMapper extends BaseMapper
             // NEXT_MAJOR: Remove the check and use `createFieldDescription`.
             if (method_exists($this->admin, 'createFieldDescription')) {
                 $fieldDescription = $this->admin->createFieldDescription(
+                    FieldDescriptionInterface::LIST_CONTEXT,
                     $name,
                     $fieldDescriptionOptions
                 );

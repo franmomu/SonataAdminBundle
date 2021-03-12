@@ -67,7 +67,7 @@ class ListMapperTest extends TestCase
 
         $this->admin
             ->method('createFieldDescription')
-            ->willReturnCallback(function (string $name, array $options = []): FieldDescriptionInterface {
+            ->willReturnCallback(function (string $context, string $name, array $options = []): FieldDescriptionInterface {
                 $fieldDescription = $this->getFieldDescriptionMock($name);
                 $fieldDescription->setOptions($options);
 

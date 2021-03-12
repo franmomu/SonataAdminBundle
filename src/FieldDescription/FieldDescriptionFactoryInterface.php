@@ -25,5 +25,5 @@ interface FieldDescriptionFactoryInterface
      * @psalm-param FieldDescriptionOptions $options
      * @phpstan-param array<string, mixed> $options
      */
-    public function create(string $class, string $name, array $options = []): FieldDescriptionInterface;
+    public function create(string $context, string $class, string $name, array $options = []): FieldDescriptionInterface;
 }

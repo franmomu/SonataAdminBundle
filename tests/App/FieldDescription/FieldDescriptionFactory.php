@@ -19,7 +19,7 @@ use Sonata\AdminBundle\Tests\App\Admin\FieldDescription;
 
 final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
 {
-    public function create(string $class, string $name, array $options = []): FieldDescriptionInterface
+    public function create(string $context, string $class, string $name, array $options = []): FieldDescriptionInterface
     {
         if (!isset($options['route']['name'])) {
             $options['route']['name'] = 'edit';

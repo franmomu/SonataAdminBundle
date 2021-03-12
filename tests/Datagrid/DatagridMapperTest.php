@@ -86,7 +86,7 @@ class DatagridMapperTest extends TestCase
 
         $admin
             ->method('createFieldDescription')
-            ->willReturnCallback(function (string $name, array $options = []): FieldDescriptionInterface {
+            ->willReturnCallback(function (string $context, string $name, array $options = []): FieldDescriptionInterface {
                 $fieldDescription = $this->getFieldDescriptionMock($name);
                 $fieldDescription->setOptions($options);
 

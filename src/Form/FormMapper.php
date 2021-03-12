@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\AdminBundle\Form;
 
 use Sonata\AdminBundle\Admin\AdminInterface;
+use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\FormContractorInterface;
 use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\AdminBundle\Mapper\BaseGroupedMapper;
@@ -111,6 +112,7 @@ class FormMapper extends BaseGroupedMapper
         // NEXT_MAJOR: Remove the check and use `createFieldDescription`.
         if (method_exists($this->admin, 'createFieldDescription')) {
             $fieldDescription = $this->admin->createFieldDescription(
+                FieldDescriptionInterface::FORM_CONTEXT,
                 $name instanceof FormBuilderInterface ? $name->getName() : $name,
                 $fieldDescriptionOptions
             );

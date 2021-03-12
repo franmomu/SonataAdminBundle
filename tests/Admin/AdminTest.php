@@ -1907,7 +1907,7 @@ class AdminTest extends TestCase
         $fieldDescriptionFactory
             ->expects($this->exactly(3))
             ->method('create')
-            ->willReturnCallback(static function ($adminClass, string $name, $filterOptions) use ($fooFieldDescription, $barFieldDescription, $bazFieldDescription) {
+            ->willReturnCallback(static function (string $type, string $class, string $name, array $options) use ($fooFieldDescription, $barFieldDescription, $bazFieldDescription) {
                 switch ($name) {
                     case 'foo':
                         $fieldDescription = $fooFieldDescription;

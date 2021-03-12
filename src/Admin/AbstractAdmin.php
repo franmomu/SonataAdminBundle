@@ -769,6 +769,7 @@ abstract class AbstractAdmin extends AbstractTaggedAdmin implements AdminInterfa
                 $filterParameters['_sort_by'] = $this->getListFieldDescription($filterParameters['_sort_by']);
             } else {
                 $filterParameters['_sort_by'] = $this->createFieldDescription(
+                    FieldDescriptionInterface::LIST_CONTEXT,
                     $filterParameters['_sort_by']
                 );
 
@@ -2969,7 +2970,7 @@ EOT;
      * @psalm-param FieldDescriptionOptions $options
      * @phpstan-param array<string, mixed> $options
      */
-    final public function createFieldDescription(string $propertyName, array $options = []): FieldDescriptionInterface
+    final public function createFieldDescription(string $context, string $propertyName, array $options = []): FieldDescriptionInterface
     {
         $fieldDescriptionFactory = $this->getFieldDescriptionFactory();
 
@@ -2981,7 +2982,7 @@ EOT;
                 $options
             );
         } else {
-            $fieldDescription = $fieldDescriptionFactory->create($this->getClass(), $propertyName, $options);
+            $fieldDescription = $fieldDescriptionFactory->create($context, $this->getClass(), $propertyName, $options);
         }
 
         $fieldDescription->setAdmin($this);
@@ -3232,6 +3233,7 @@ EOT;
 
         if (\count($this->getBatchActions()) > 0 && $this->hasRequest() && !$this->getRequest()->isXmlHttpRequest()) {
             $fieldDescription = $this->createFieldDescription(
+                FieldDescriptionInterface::LIST_CONTEXT,
                 'batch',
                 [
                     'label' => 'batch',
@@ -3256,6 +3258,7 @@ EOT;
 
         if ($this->hasRequest() && $this->getRequest()->isXmlHttpRequest()) {
             $fieldDescription = $this->createFieldDescription(
+                FieldDescriptionInterface::LIST_CONTEXT,
                 'select',
                 [
                     'label' => false,

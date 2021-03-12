@@ -61,6 +61,11 @@ use Symfony\Component\PropertyAccess\PropertyPathInterface;
  */
 interface FieldDescriptionInterface
 {
+    public const LIST_CONTEXT = 'list';
+    public const SHOW_CONTEXT = 'show';
+    public const FORM_CONTEXT = 'form';
+    public const FILTER_CONTEXT = 'filter';
+
     public const TYPE_ARRAY = 'array';
     public const TYPE_BOOLEAN = 'boolean';
     public const TYPE_DATE = 'date';
