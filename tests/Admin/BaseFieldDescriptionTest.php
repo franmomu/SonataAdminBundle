@@ -15,8 +15,8 @@ namespace Sonata\AdminBundle\Tests\Admin;
 
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
-use Sonata\AdminBundle\Admin\BaseFieldDescription;
 use Sonata\AdminBundle\Exception\NoValueException;
+use Sonata\AdminBundle\FieldDescription\BaseFieldDescription;
 use Sonata\AdminBundle\Tests\Fixtures\Admin\FieldDescription;
 use Sonata\AdminBundle\Tests\Fixtures\Entity\FooCall;
 use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
@@ -117,7 +117,7 @@ class BaseFieldDescriptionTest extends TestCase
     {
         $description = new FieldDescription('name');
 
-        $this->expectDeprecation('The "Sonata\AdminBundle\Admin\BaseFieldDescription::setMappingType()" method is deprecated since version 3.83 and will be removed in 4.0.');
+        $this->expectDeprecation('The "Sonata\AdminBundle\FieldDescription\BaseFieldDescription::setMappingType()" method is deprecated since version 3.83 and will be removed in 4.0.');
 
         $description->setMappingType('int');
         $this->assertSame('int', $description->getMappingType());

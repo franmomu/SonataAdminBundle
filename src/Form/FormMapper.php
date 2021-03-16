@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Sonata\AdminBundle\Form;
 
 use Sonata\AdminBundle\Admin\AdminInterface;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\FormContractorInterface;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\AdminBundle\Mapper\BaseGroupedMapper;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType as SymfonyCollectionType;

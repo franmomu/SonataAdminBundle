@@ -13,33 +13,34 @@ declare(strict_types=1);
 
 namespace Sonata\AdminBundle\FieldDescription;
 
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
+use Sonata\AdminBundle\Guesser\TypeGuesserInterface as DeprecatedTypeGuesserInterface;
+use Sonata\AdminBundle\Model\ModelManagerInterface;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\Guess\TypeGuess;
 
 /**
+ * @final
+ *
  * The code is based on Symfony2 Form Components.
  */
-final class TypeGuesserChain implements TypeGuesserInterface
+class TypeGuesserChain implements TypeGuesserInterface, DeprecatedTypeGuesserInterface
 {
     /**
-     * @var TypeGuesserInterface[]
+     * @var TypeGuesserInterface[]|DeprecatedTypeGuesserInterface[]
      */
     private $guessers = [];
 
     /**
-     * @param TypeGuesserInterface[] $guessers
+     * @param TypeGuesserInterface[]|DeprecatedTypeGuesserInterface[] $guessers
      */
     public function __construct(array $guessers)
     {
         $allGuessers = [];
 
         foreach ($guessers as $guesser) {
-            if (!$guesser instanceof TypeGuesserInterface) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Expected argument of type "%s", "%s" given',
-                    TypeGuesserInterface::class,
-                    \is_object($guesser) ? \get_class($guesser) : \gettype($guesser)
-                ));
+            if (!$guesser instanceof TypeGuesserInterface && !$guesser instanceof DeprecatedTypeGuesserInterface) {
+                // NEXT_MAJOR: Throw \InvalidArgumentException
+                throw new UnexpectedTypeException($guesser, TypeGuesserInterface::class);
             }
 
             if ($guesser instanceof self) {
@@ -57,9 +58,42 @@ final class TypeGuesserChain implements TypeGuesserInterface
         $guesses = [];
 
         foreach ($this->guessers as $guesser) {
+            if (!$guesser instanceof TypeGuesserInterface) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Expected guesser of type "%s", "%s" given',
+                    TypeGuesserInterface::class,
+                    DeprecatedTypeGuesserInterface::class
+                ));
+            }
+
             $guesses[] = $guesser->guess($fieldDescription);
         }
 
         return TypeGuess::getBestGuess($guesses);
     }
+
+    public function guessType($class, $property, ModelManagerInterface $modelManager)
+    {
+        $guesses = [];
+
+        foreach ($this->guessers as $guesser) {
+            $guess = $guesser->guessType($class, $property, $modelManager);
+
+            if (!$guesser instanceof DeprecatedTypeGuesserInterface) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Expected guesser of type "%s", "%s" given',
+                    DeprecatedTypeGuesserInterface::class,
+                    TypeGuesserInterface::class
+                ));
+            }
+
+            if (null !== $guess) {
+                $guesses[] = $guess;
+            }
+        }
+
+        return TypeGuess::getBestGuess($guesses);
+    }
 }
+
+class_exists(\Sonata\AdminBundle\Guesser\TypeGuesserChain::class);
