@@ -263,7 +263,7 @@ class CRUDControllerTest extends TestCase
 
         $this->kernel = $this->createMock(KernelInterface::class);
 
-        $this->container->set('sonata.admin.pool', $this->pool);
+        $this->container->set('sonata.admin.pool.internal', $this->pool);
         $this->container->set('request_stack', $requestStack);
         $this->container->set('foo.admin', $this->admin);
         $this->container->set('foo.admin.template_registry', $this->templateRegistry);

@@ -27,7 +27,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->services()
 
         ->set('sonata.admin.menu_builder', MenuBuilder::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->args([
                 new ReferenceConfigurator('sonata.admin.pool'),
                 new ReferenceConfigurator('knp_menu.factory'),
@@ -36,7 +38,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ])
 
         ->set('sonata.admin.sidebar_menu', MenuItem::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->tag('knp_menu.menu', ['alias' => 'sonata_admin_sidebar'])
             ->factory([
                 new ReferenceConfigurator('sonata.admin.menu_builder'),
@@ -52,7 +56,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ])
 
         ->set('sonata.admin.menu.matcher.voter.admin', AdminVoter::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->tag('knp_menu.voter')
             ->args([
                 new ReferenceConfigurator('request_stack'),

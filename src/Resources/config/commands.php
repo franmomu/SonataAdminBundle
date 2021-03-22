@@ -41,7 +41,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ])
 
         ->set(ExplainAdminCommand::class, ExplainAdminCommand::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->tag('console.command')
             ->args([
                 new ReferenceConfigurator('sonata.admin.pool'),
@@ -59,14 +61,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ->call('setRegistry', [(new ReferenceConfigurator('doctrine'))->nullOnInvalid()])
 
         ->set(ListAdminCommand::class, ListAdminCommand::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->tag('console.command')
             ->args([
                 new ReferenceConfigurator('sonata.admin.pool'),
             ])
 
         ->set(SetupAclCommand::class, SetupAclCommand::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->tag('console.command')
             ->args([
                 new ReferenceConfigurator('sonata.admin.pool'),

@@ -49,7 +49,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->services()
 
         ->set('sonata.admin.pool', Pool::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->args([
                 new ReferenceConfigurator('service_container'),
                 [], // admin service ids
@@ -74,7 +76,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->alias(SonataConfiguration::class, 'sonata.admin.configuration')
 
         ->set('sonata.admin.route_loader', AdminPoolLoader::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->tag('routing.loader')
             ->args([
                 new ReferenceConfigurator('sonata.admin.pool'),
@@ -85,7 +89,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->alias(AdminPoolLoader::class, 'sonata.admin.route_loader')
 
         ->set('sonata.admin.helper', AdminHelper::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->args([
                 new ReferenceConfigurator('property_accessor'),
                 // NEXT_MAJOR: Remove next line.
@@ -95,7 +101,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->alias(AdminHelper::class, 'sonata.admin.helper')
 
         ->set('sonata.admin.builder.filter.factory', FilterFactory::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->args([
                 new ReferenceConfigurator('service_container'),
                 [],
@@ -106,7 +114,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->alias(FilterFactoryInterface::class, 'sonata.admin.builder.filter.factory')
 
         ->set('sonata.admin.breadcrumbs_builder', BreadcrumbsBuilder::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->args([
                 '%sonata.admin.configuration.breadcrumbs%',
             ])
@@ -118,29 +128,39 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // Services used to format the label, default is sonata.admin.label.strategy.noop
 
         ->set('sonata.admin.label.strategy.bc', BCLabelTranslatorStrategy::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
 
         ->alias(BCLabelTranslatorStrategy::class, 'sonata.admin.label.strategy.bc')
 
         ->set('sonata.admin.label.strategy.native', NativeLabelTranslatorStrategy::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
 
         ->alias(NativeLabelTranslatorStrategy::class, 'sonata.admin.label.strategy.native')
 
         ->alias(LabelTranslatorStrategyInterface::class, 'sonata.admin.label.strategy.native')
 
         ->set('sonata.admin.label.strategy.noop', NoopLabelTranslatorStrategy::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
 
         ->alias(NoopLabelTranslatorStrategy::class, 'sonata.admin.label.strategy.noop')
 
         ->set('sonata.admin.label.strategy.underscore', UnderscoreLabelTranslatorStrategy::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
 
         ->alias(UnderscoreLabelTranslatorStrategy::class, 'sonata.admin.label.strategy.underscore')
 
         ->set('sonata.admin.label.strategy.form_component', FormLabelTranslatorStrategy::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
 
         ->alias(FormLabelTranslatorStrategy::class, 'sonata.admin.label.strategy.form_component')
 
@@ -187,7 +207,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ])
 
         ->set('sonata.admin.audit.manager', AuditManager::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->args([
                 new ReferenceConfigurator('service_container'),
             ])
@@ -205,7 +227,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ))
 
         ->set('sonata.admin.search.handler', SearchHandler::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->args([
                 '%sonata.admin.configuration.global_search.case_sensitive%',
             ])
@@ -213,7 +237,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->alias(SearchHandler::class, 'sonata.admin.search.handler')
 
         ->set('sonata.admin.event.extension', AdminEventExtension::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->tag('sonata.admin.extension', ['global' => true])
             ->args([
                 new ReferenceConfigurator('event_dispatcher'),
@@ -222,7 +248,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->alias(AdminEventExtension::class, 'sonata.admin.event.extension')
 
         ->set('sonata.admin.lock.extension', LockExtension::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->tag('sonata.admin.extension', ['global' => true])
 
         // NEXT_MAJOR: Remove this service definition and alias.
@@ -245,7 +273,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->alias(FilterPersisterInterface::class, 'sonata.admin.filter_persister.session')
 
         ->set('sonata.admin.global_template_registry', TemplateRegistry::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->args([
                 '%sonata.admin.configuration.templates%',
             ])

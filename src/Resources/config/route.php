@@ -25,33 +25,43 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->services()
 
         ->set('sonata.admin.route.path_info', PathInfoBuilder::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->args([
                 new ReferenceConfigurator('sonata.admin.audit.manager'),
             ])
 
         ->set('sonata.admin.route.query_string', QueryStringBuilder::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->args([
                 new ReferenceConfigurator('sonata.admin.audit.manager'),
             ])
 
         ->set('sonata.admin.route.default_generator', DefaultRouteGenerator::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->args([
                 new ReferenceConfigurator('router'),
                 new ReferenceConfigurator('sonata.admin.route.cache'),
             ])
 
         ->set('sonata.admin.route.cache', RoutesCache::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->args([
                 '%kernel.cache_dir%/sonata/admin',
                 '%kernel.debug%',
             ])
 
         ->set('sonata.admin.route.cache_warmup', RoutesCacheWarmUp::class)
+            // NEXT_MAJOR: Remove public and sonata.container.private tag.
             ->public()
+            ->tag('sonata.container.private', ['version' => '3.x'])
             ->tag('kernel.cache_warmer')
             ->args([
                 new ReferenceConfigurator('sonata.admin.route.cache'),
