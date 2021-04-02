@@ -21,20 +21,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class DateTimeRangeTypeTest extends TypeTestCase
 {
-    public function testGetDefaultOptions(): void
+    public function testDefaultOptions(): void
     {
-        $type = new DateTimeRangeType();
+        $form = $this->factory->create($this->getTestedType());
 
-        $optionsResolver = new OptionsResolver();
+        $view = $form->createView();
 
-        $type->configureOptions($optionsResolver);
+        $this->assertFalse($view->children['type']->vars['required']);
+        $this->assertTrue($view->children['value']->vars['required']);
+    }
 
-        $options = $optionsResolver->resolve();
-
-        $expected = [
-            'field_type' => FormDateTimeRangeType::class,
-            'field_options' => ['date_format' => DateType::HTML5_FORMAT],
-        ];
-        $this->assertSame($expected, $options);
+    protected function getTestedType(): string
+    {
+        return DateTimeRangeType::class;
     }
 }
