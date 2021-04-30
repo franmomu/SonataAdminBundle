@@ -73,6 +73,7 @@
         "sonata-project/user-bundle": "<3.3"
     },
     "require-dev": {
+        "friendsoftwig/twigcs": "dev-issue-146-add-reports",
         "jms/translation-bundle": "^1.4",
         "matthiasnoback/symfony-config-test": "^4.2",
         "matthiasnoback/symfony-dependency-injection-test": "^4.2",
@@ -111,5 +112,12 @@
         "psr-4": {
             "Sonata\\AdminBundle\\Tests\\": "tests/"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/franmomu/twigcs"
+
+        }
+    ]
 }
