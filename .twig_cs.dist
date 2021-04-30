@@ -1,0 +1,7 @@
+<?php
+
+return \FriendsOfTwig\Twigcs\Config\Config::create()
+    ->addFinder(FriendsOfTwig\Twigcs\Finder\TemplateFinder::create()->in(__DIR__.'/src/Resources/views'))
+    ->setSeverity('error')
+    ->setDisplay('blocking')
+;

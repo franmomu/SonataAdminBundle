@@ -40,6 +40,32 @@ jobs:
               with:
                   args: --dry-run
 
+    twigcs:
+        name: Twigcs
+
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Install PHP with extensions
+              uses: shivammathur/setup-php@v2
+              env:
+                  COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  php-version: 7.4
+                  tools: composer:v2
+
+            - name: Install Composer dependencies (highest)
+              uses: "ramsey/composer-install@v1"
+              with:
+                  dependency-versions: "highest"
+                  composer-options: "--prefer-dist --prefer-stable"
+
+            - name: Twigcs
+              run: vendor/bin/twigcs --reporter githubAction
+
     yaml-files:
         name: YAML files
 
